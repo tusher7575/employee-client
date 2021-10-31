@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import dateFormat, { masks } from "dateformat";
 import Select from 'react-select'
 import axios from 'axios'
+import Swal from "sweetalert2";  
 
 class CreateEmployeeComponent extends Component {
 
@@ -74,15 +75,31 @@ class CreateEmployeeComponent extends Component {
         console.log('employee => ' + JSON.stringify(employee));
 
         // step 5
-        if (this.state.id === '_add') {
-            EmployeeService.createEmployee(employee).then(res => {
-                this.props.history.push('/employees');
-            });
-        } else {
-            EmployeeService.updateEmployee(employee, this.state.id).then(res => {
-                this.props.history.push('/employees');
-            });
-        }
+     if(this.state.empName==''){
+
+        Swal.fire({
+            title: 'Empty Employee Name Is restricted',toast: true, timer: 5000
+           
+          });
+     }
+
+     else if(this.state.empName.length>35){Swal.fire({
+        title: 'Employee Name Length Must Be Under 36 Character',toast: true, timer: 5000
+       
+      });}
+
+        else{
+            if (this.state.id === '_add') {
+                EmployeeService.createEmployee(employee).then(res => {
+                    this.props.history.push('/employees');
+                });
+            } else {
+                EmployeeService.updateEmployee(employee, this.state.id).then(res => {
+                    this.props.history.push('/employees');
+                });
+            }
+            
+          }
     }
 
     changeEmpNameHandler = (event) => {
@@ -123,14 +140,15 @@ class CreateEmployeeComponent extends Component {
                 <br></br>
                 <div className="container">
                     <div className="row">
-                        
+                    <div className="col-md-12 divStyle"  >
                             {
                                 this.getTitle()
                             }
+                        </div>
                             
                                 <form>
                                     <div className="row">
-                                    <div className="col-sm-4 divStyle"  >
+                                    <div className="col-sm-4 divStyle2"  >
                                         
                                         <input placeholder="Employee Name" name="firstName" className="form-control"
                                             value={this.state.empName} onChange={this.changeEmpNameHandler} />
@@ -152,18 +170,21 @@ class CreateEmployeeComponent extends Component {
 
 
 
-                                    <div className="col-sm-4 divStyle">
+                                    <div className="col-sm-4 divStyle2">
                                         <Select placeholder="Department" options={this.state.selectOptions} onChange={this.handleChange.bind(this)} />
                                     </div>
 
                                     <div className="col-sm-4">
                                         <Select placeholder="Select Gender"   options={this.state.selectGender} onChange={this.handleGenderChange.bind(this)} />
                                     </div>
+                                    <div className="col-sm-4">
+                                    </div>
 
 
 
                                     <div className="col-sm-4">
                                     <button className="btn btn-success btn-block" onClick={this.saveOrUpdateEmployee}>Save</button>
+                                    </div><div className="col-sm-4">
                                     </div> <div className="col-sm-4">
                                     <button className="btn btn-danger btn-block" onClick={this.cancel.bind(this)} style={{ marginLeft: "10px" }}>Cancel</button>
                                     </div>

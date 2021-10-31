@@ -3,6 +3,7 @@ import EmployeeService from '../../services/EmployeeService';
 import 'react-datepicker/dist/react-datepicker.css'
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Container } from 'react-bootstrap'
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";  
 
 
 
@@ -59,7 +60,8 @@ class CreateDepartmentComponent extends Component {
         let department = { deptName: this.state.deptName, active: this.state.active };
         console.log('department => ' + JSON.stringify(department));
 
-        // step 5
+      if(this.state.deptName!=''){
+            
         if (this.state.id === '_add') {
             EmployeeService.createDepartment(department).then(res => {
                 this.props.history.push('/departments');
@@ -70,6 +72,14 @@ class CreateDepartmentComponent extends Component {
                 this.props.history.push('/departments');
             });
         }
+      }
+      else{
+
+        Swal.fire({
+            title: 'Empty Field Is restricted',toast: true, timer: 5000
+           
+          });
+      }
     }
 
 
@@ -95,6 +105,7 @@ class CreateDepartmentComponent extends Component {
 
     cancel() {
         this.props.history.push('/departments');
+
     }
 
     getTitle() {
@@ -120,7 +131,7 @@ class CreateDepartmentComponent extends Component {
                             <form >
                                 {/* onSubmit={handleSubmit(onSubmit)} */}
                                 <div className="row">
-                                    <div className="col-md-6 divStyle"  >
+                                    <div className="col-md-6 "  >
 
                                         <input placeholder="Department Name" name="deptName" className="form-control"
                                             value={this.state.deptName} onChange={this.changeDeptName} required />
