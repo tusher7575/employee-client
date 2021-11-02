@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import EmployeeService from '../../services/EmployeeService'
 import dateFormat, { masks } from "dateformat";
-import axios from 'axios'
+
 
 
 class ViewEmployeeComponent extends Component {
@@ -16,14 +16,12 @@ class ViewEmployeeComponent extends Component {
     }
 
     
-    async getOptions() {
-        const res = await axios.get('http://localhost:4444/department/all')
-        this.setState({department: res.data});
-
-    }
+ 
 
     componentDidMount(){
-        this.getOptions();
+        EmployeeService.getDepartments().then((res) => {
+            this.setState({ department: res.data });
+        });
         EmployeeService.getEmployeeById(this.state.id).then( res => {
             this.setState({employee: res.data});
         })

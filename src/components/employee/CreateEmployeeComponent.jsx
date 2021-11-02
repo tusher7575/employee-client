@@ -3,7 +3,6 @@ import EmployeeService from '../../services/EmployeeService';
 import 'react-datepicker/dist/react-datepicker.css'
 import dateFormat, { masks } from "dateformat";
 import Select from 'react-select'
-import axios from 'axios'
 import Swal from "sweetalert2";  
 
 class CreateEmployeeComponent extends Component {
@@ -24,32 +23,35 @@ class CreateEmployeeComponent extends Component {
             deptid: '',
             selectGender: [{ value: 0, label: 'Male' }, { value: 1, label: 'FeMale' }, { value: 2, label: 'Others' }],
             gender: 0,
-            gen:'Male'
+            
+            data:[]
         }
-        // this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
-        // this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
-        // this.saveOrUpdateEmployee = this.saveOrUpdateEmployee.bind(this);
+     
     }
 
     async getOptions() {
-        const res = await axios.get('http://localhost:4444/department/active')
-        const data = res.data
 
-        const options = data.map(d => ({
-            "value": d.id,
-            "label": d.deptName
+        EmployeeService.getActiveDepartments().then((res) => {
+            this.setState({ data: res.data });
 
-        }))
+            const options = this.state.data.map(d => ({
+                "value": d.id,
+                "label": d.deptName
+    
+            }))
+            this.setState({ selectOptions: options })
+        });
 
-        this.setState({ selectOptions: options })
+    
+
+      
 
     }
 
-    // step 3
-    componentDidMount() {
 
-        this.getOptions();
-        // step 4
+    componentDidMount() {
+    this.getOptions();
+        
         if (this.state.id === '_add') {
 
             return
@@ -74,7 +76,6 @@ class CreateEmployeeComponent extends Component {
         let employee = { empName: this.state.empName, gender: this.state.gender, mobNo: this.state.mobNo, deptid: this.state.deptid, dateOfB: dateFormat(this.state.dateOfB, 'yyyy-mm-dd') };
         console.log('employee => ' + JSON.stringify(employee));
 
-        // step 5
      if(this.state.empName==''){
 
         Swal.fire({

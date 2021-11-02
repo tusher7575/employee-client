@@ -30,6 +30,10 @@ class EmployeeService {
         return axios.get(BASE_URL+'/department/all');
     }
 
+    getActiveDepartments(){
+        return axios.get(BASE_URL+'/department/active');
+    }
+
     
     createDepartment(department){
         return axios.post(BASE_URL+'/department/save', department);
