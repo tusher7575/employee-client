@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import EmployeeService from '../../services/EmployeeService'
 import dateFormat, { masks } from "dateformat";
+import axios from 'axios'
 
 
 class ViewEmployeeComponent extends Component {
@@ -9,11 +10,20 @@ class ViewEmployeeComponent extends Component {
 
         this.state = {
             id: this.props.match.params.id,
-            employee: {}
+            employee: {},
+            department:[]
         }
     }
 
+    
+    async getOptions() {
+        const res = await axios.get('http://localhost:4444/department/all')
+        this.setState({department: res.data});
+
+    }
+
     componentDidMount(){
+        this.getOptions();
         EmployeeService.getEmployeeById(this.state.id).then( res => {
             this.setState({employee: res.data});
         })
@@ -23,29 +33,30 @@ class ViewEmployeeComponent extends Component {
         return (
             <div>
                 <br></br>
-                <div className = "card col-md-6 offset-md-3">
+                <div className = "card col-md-6 offset-md-3 vwDiv">
                     <h3 className = "text-center">Employee Details</h3>
                     <div className = "card-body">
                         <div className = "row">
-                            <label> Employee Name : </label>
-                            <div> { this.state.employee.empName }</div>
+                            <label> <b> Employee Name :</b>  </label>
+                            <div>&nbsp; { this.state.employee.empName }</div>
                         </div>
                         <div className = "row">
-                            <label> Mobile No : </label>
-                            <div> { this.state.employee.mobNo }</div>
+                            <label><b>  Mobile No : </b> </label>
+                            <div> &nbsp;{ this.state.employee.mobNo }</div>
                         </div>
                         <div className = "row">
-                            <label> Employee Gender : </label>
-                            <div> { this.state.employee.gender }</div>  
+                            <label><b>  Employee Gender : </b> </label>
+                            <div> &nbsp;{ this.state.employee.gender }</div>  
                         </div>
                         <div className = "row">
-                            <label> Department : </label>
-                            <div> { this.state.employee.deptid }</div>  
+                            <label> <b> Department : </b> </label>
+                            <div> &nbsp;     {this.state.department.map(
+                                    dept => <span  >{dept.id===this.state.employee.deptid? dept.deptName:'' } </span>)} </div> 
                         </div>
 
                         <div className = "row">
-                            <label> Employee Birth Date : </label>
-                            <div> {dateFormat(this.state.employee.dateOfB, 'dd-mm-yyyy')} </div> 
+                            <label><b>  Employee Birth Date :</b>  </label>
+                            <div>&nbsp; {dateFormat(this.state.employee.dateOfB, 'dd-mm-yyyy')} </div> 
 
                             
                         </div>

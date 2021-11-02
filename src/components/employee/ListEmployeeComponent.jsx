@@ -26,8 +26,6 @@ class ListEmployeeComponent extends Component {
         const res = await axios.get('http://localhost:4444/department/all')
         this.setState({department: res.data});
 
-       console.log(this.state.department);
-
     }
 
     deleteEmployee(id) {

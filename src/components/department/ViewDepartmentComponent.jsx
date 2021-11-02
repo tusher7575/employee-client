@@ -34,16 +34,16 @@ class ViewDepartmentComponent extends Component {
         return (
             <div>
                 <br></br>
-                <div className = "card col-md-6 offset-md-3">
-                    <h3 className = "text-center"> View Department Details</h3>
+                <div className = "card col-md-6 offset-md-3 vwDiv">
+                    <h3 className = "text-center"> Department Details</h3>
                     <div className = "card-body">
                         <div className = "row">
-                            <label> Department Name: </label>
-                            <div> { this.state.department.deptName }</div>
+                            <label><b> Department Name : </b> </label>
+                            <div> &nbsp;{ this.state.department.deptName }</div>
                         </div>
                         <div className = "row">
-                            <label> Active: </label>
-                            <div> { this.state.isActive }</div>
+                            <label> <b> Active :</b>  </label>
+                            <div>&nbsp; { this.state.isActive }</div>
                         </div>
                     
                     </div>
